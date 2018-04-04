@@ -1,6 +1,4 @@
-#include <Servo.h>
 #include <PID.h>
-
 
 const int LED = A1;
 const int POT = A2;

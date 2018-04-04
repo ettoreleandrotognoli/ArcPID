@@ -5,12 +5,6 @@ OBJHSUFFIX := h
 RUNSUFFIX := cc
 RUNHSUFFIX := hh
 
-#$@    Nome da regra. 
-#$<    Nome da primeira dependência 
-#$^    Lista de dependências
-#$?    Lista de dependências mais recentes que a regra.
-#$*    Nome do arquivo sem sufixo
-
 CFLAGS := -pipe -g -std=c++11
 CLIBS := -L/usr/lib64 -lpthread 
 CTEST_LIBS = -lgtest
