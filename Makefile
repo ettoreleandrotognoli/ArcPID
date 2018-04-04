@@ -11,7 +11,7 @@ CTEST_LIBS = -lgtest
 DIR := $(CURDIR)
 
 CINCLUDES := -I/usr/include
-CINCLUDES := -I$(DIR) $(CINCLUDES)
+CINCLUDES := -I$(DIR) -I$(DIR)/src $(CINCLUDES)
 
 
 OSRC := $(shell find -type f -iname '*.$(OBJSUFFIX)' )

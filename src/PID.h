@@ -5,7 +5,7 @@
 
 #include "linux/Arduino.hpp"
 
-#elif __AVR__
+#else
 
 #include <Arduino.h>
 
