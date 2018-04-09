@@ -28,7 +28,7 @@ test: $(TESTS)
 all: $(OBJECTS) $(RUNS)
 
 clean:
-	rm -f $(OBJECTS) $(RUNS)
+	rm -f $(OBJECTS) $(RUNS) $(TESTS)
 
 %.o: %.cpp $(OHSRC)
 	$(CC) $(CFLAGS) -c $< -o $@ $(CINCLUDES)

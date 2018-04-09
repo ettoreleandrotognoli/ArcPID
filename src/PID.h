@@ -1,6 +1,8 @@
 #ifndef __ARC_PID__
 #define __ARC_PID__
 
+#include <tuple>
+
 #ifdef __linux__
 
 #include "linux/Arduino.hpp"
@@ -15,6 +17,24 @@ namespace arc {
 
   template<typename V>
   class PID {
+  public:
+    PID(std::tuple<V,V,V> pid);
+    PID(V kp,V ki, V kd);
+    PID(const PID& pid);
+    virtual ~PID();
+    void setInput(const V& value);
+    void setInput(const V& value, unsigned long t);
+    V update(V feedback, unsigned long interval);
+    V getOutput() const;
+    PID<V>& setKp(V kp);
+    PID<V>& setKi(V ki);
+    PID<V>& setKd(V kd);
+    const V getKp() const;
+    const V getKi() const;
+    const V getKd() const;
+    PID<V>& setTarget(V target);
+    const V getTarget() const;
+
   protected:
     unsigned long lastTime;
     V integral;
@@ -28,23 +48,17 @@ namespace arc {
 
     bool errorMagnitudeChanged(V newError) const;
 
-  public:
-
-    PID(V kp,V ki, V kd);
-    void setInput(V value);
-    void setInput(V value, unsigned long t);
-    V update(V feedback, unsigned long interval);
-    V getOutput() const;
-    PID<V>& setKp(V kp);
-    PID<V>& setKi(V ki);
-    PID<V>& setKd(V kd);
-    const V getKp() const;
-    const V getKi() const;
-    const V getKd() const;
-    PID<V>& setTarget(V target);
-    const V getTarget() const;
 
   };
+
+  template<typename V>
+  PID<V>::PID(std::tuple<V,V,V> pid){
+    this->kp = std::get<0>(pid);
+    this->ki = std::get<1>(pid);
+    this->kd = std::get<2>(pid);
+    this->lastTime = 0;
+    this->error = 0;
+  }
 
   template<typename V>
   PID<V>::PID(V kp,V ki,V kd){
@@ -56,19 +70,32 @@ namespace arc {
   }
 
   template<typename V>
-  void PID<V>::setInput(V value){
+  PID<V>::PID(const PID<V>& pid){
+    this->kp = pid.kp;
+    this->ki = pid.ki;
+    this->kd = pid.kd;
+    this->lastTime = 0;
+    this->error = 0;
+  }
+
+  template<typename V>
+  PID<V>::~PID(){
+  }
+
+  template<typename V>
+  inline void PID<V>::setInput(const V& value){
     unsigned long t = millis();
     this->setInput(value,t);
   }
 
   template<typename V>
-  void PID<V>::setInput(V value,unsigned long t){
+  inline void PID<V>::setInput(const V& value,unsigned long t){
     this->update(value,t - this->lastTime); 
     this->lastTime = t;
   }
 
   template<typename V>
-  bool PID<V>::errorMagnitudeChanged(V newError) const{
+  inline bool PID<V>::errorMagnitudeChanged(V newError) const{
     if(newError > 0 && this->error < 0){
       return true;
     }
