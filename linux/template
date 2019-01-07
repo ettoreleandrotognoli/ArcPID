@@ -1,0 +1,20 @@
+
+void setup();
+void loop();
+
+/**
+*
+*/
+#include <Arduino.h>
+
+int main(int argc,char ** argv){
+    setup();
+    while(true){
+        loop();
+    }
+}
+
+/**
+*
+*/
+

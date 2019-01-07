@@ -2,16 +2,7 @@
 #define __ARC_PID__
 
 #include <tuple>
-
-#ifdef __linux__
-
-#include "linux/Arduino.hpp"
-
-#else
-
 #include <Arduino.h>
-
-#endif
 
 namespace arc {
 

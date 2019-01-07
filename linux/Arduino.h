@@ -12,9 +12,30 @@
 typedef unsigned char byte;
 typedef unsigned char uint8_t;
 
+
+static const uint8_t SS   = 10;
+static const uint8_t MOSI = 11;
+static const uint8_t MISO = 12;
+static const uint8_t SCK  = 13;
+
+static const uint8_t SDA = 18;
+static const uint8_t SCL = 19;
+#define LED_BUILTIN 13
+
+static const uint8_t A0 = 14;
+static const uint8_t A1 = 15;
+static const uint8_t A2 = 16;
+static const uint8_t A3 = 17;
+static const uint8_t A4 = 18;
+static const uint8_t A5 = 19;
+static const uint8_t A6 = 20;
+static const uint8_t A7 = 21;
+
 const byte INPUT = 'z';
 const byte INPUT_PULLUP = 'Z';
 const byte OUTPUT = 'o';
+
+void delay(unsigned long ms);
 
 unsigned long millis();
 
@@ -195,6 +216,7 @@ class Stream : public Print
 
 class LinuxSerial : public Stream {
 public:
+    void begin(int bd){};
     int available(){return 0;};
     int read(){return -1;};
     int peek(){return -1;};
@@ -204,5 +226,25 @@ public:
 
 extern LinuxSerial Serial;
 
+
+template<typename V>
+V min(V a ,V b){
+  if(a <= b){
+    return a;
+  }
+  else{
+    return b;
+  }
+}
+
+template<typename V>
+V max(V a ,V b){
+  if(a >= b){
+    return a;
+  }
+  else{
+    return b;
+  }
+}
 
 #endif

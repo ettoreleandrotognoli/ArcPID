@@ -1,4 +1,9 @@
-#include "Arduino.hpp"
+#include "Arduino.h"
+#include <unistd.h>
+
+void delay(unsigned long ms){
+  usleep(ms*1000);
+}
 
 unsigned long millis(){
 	return clock();

@@ -22,7 +22,7 @@ void loop() {
   unsigned short potRaw = analogRead(POT);
   ledPid.setTarget(potRaw);
   ledPid.setInput(ldrRaw);
-  ledValue = min(255,max(0,ledValue + ledPid.getOutput()));
+  ledValue = min(255.0,max(0.0,ledValue + ledPid.getOutput()));
   Serial.print("{\"ldr\":");
   Serial.print(ldrRaw,DEC);
   Serial.print(",\"pot\":");

@@ -5,13 +5,15 @@ OBJHSUFFIX := h
 RUNSUFFIX := cc
 RUNHSUFFIX := hh
 
+ARDUINOSUFFIX := ino
+
 CFLAGS := -pipe -g -std=c++11
 CLIBS := -L/usr/lib64 -lpthread 
 CTEST_LIBS = -lgtest
 DIR := $(CURDIR)
 
 CINCLUDES := -I/usr/include
-CINCLUDES := -I$(DIR) -I$(DIR)/src $(CINCLUDES)
+CINCLUDES := -I$(DIR)/src -I$(DIR)/linux $(CINCLUDES)
 
 
 OSRC := $(shell find -type f -iname '*.$(OBJSUFFIX)' )
@@ -23,18 +25,29 @@ RHSRC := $(shell find -type f -iname '*.$(RUNHSUFFIX)' )
 RUNS := $(foreach x, $(basename $(RSRC)), $(x).run)
 TESTS := $(foreach x, $(basename $(RUNS)), $(x).test)
 
+INOSRC := $(shell find -type f -iname '*.$(ARDUINOSUFFIX)' )
+INOOBJ := $(foreach x, $(basename $(INOSRC)), $(x).ao)
+
 test: $(TESTS)
 
 all: $(OBJECTS) $(RUNS)
 
+ino: $(INOOBJ)
+
 clean:
-	rm -f $(OBJECTS) $(RUNS) $(TESTS)
+	rm -f $(OBJECTS) $(RUNS) $(TESTS) $(INOOBJ)
 
 %.o: %.cpp $(OHSRC)
 	$(CC) $(CFLAGS) -c $< -o $@ $(CINCLUDES)
 
+%.ao: %.ino $(OBJECTS)
+	cp -f linux/template $<.cxx
+	cat $< >> $<.cxx
+	$(CC) $(CFLAGS) $<.cxx -o $@ $(CLIBS) $(CINCLUDES) $(OBJECTS)
+	rm -f $<.cxx
+
 %.run: %.cc $(OBJECTS)
-	$(CC) $(CFLAGS) $< -o $@ $(CLIBS) $(CTEST_LIBS) $(CINCLUDES) $(OBJECTS)  
+	$(CC) $(CFLAGS) $< -o $@ $(CLIBS) $(CTEST_LIBS) $(CINCLUDES) $(OBJECTS)
 
 %.test: %.run
 	./$< > $@
